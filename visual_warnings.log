@@ -1,0 +1,91 @@
+2025-04-08 21:17:06,855 - __main__ - INFO - Fetching warnings for location: 35.2271, -80.8431
+2025-04-08 21:17:07,816 - warning_service - ERROR - Error fetching warnings: 404 Client Error: Not Found for url: https://api.weather.gov/alerts/active/zone/https://api.weather.gov/zones/county/NCC119
+2025-04-08 21:17:07,819 - __main__ - INFO - No active warnings found for location: 35.2271, -80.8431
+2025-04-08 21:17:07,819 - __main__ - INFO - No warning maps were generated
+2025-04-08 21:19:29,507 - __main__ - INFO - Fetching warnings for location: 37.3281, -87.4989
+2025-04-08 21:19:30,520 - warning_service - ERROR - Error fetching warnings: 404 Client Error: Not Found for url: https://api.weather.gov/alerts/active/zone/https://api.weather.gov/zones/county/KYC107
+2025-04-08 21:19:30,523 - __main__ - INFO - No active warnings found for location: 37.3281, -87.4989
+2025-04-08 21:19:30,523 - __main__ - INFO - No warning maps were generated
+2025-04-08 21:26:13,684 - __main__ - INFO - Fetching warnings for location: 37.3281, -87.4989
+2025-04-08 21:26:14,204 - warning_service - ERROR - Error fetching warnings: 400 Client Error: Bad Request for url: https://api.weather.gov/alerts/active?zone/https://api.weather.gov/zones/county/KYC107
+2025-04-08 21:26:14,209 - __main__ - INFO - No active warnings found for location: 37.3281, -87.4989
+2025-04-08 21:26:14,209 - __main__ - INFO - No warning maps were generated
+2025-04-08 21:30:49,758 - __main__ - INFO - Fetching warnings for location: 37.3281, -87.4989
+2025-04-08 21:30:57,085 - warning_service - INFO - Fetching alerts from: https://api.weather.gov/alerts/active?zone=KYC107
+2025-04-08 21:30:57,683 - __main__ - INFO - Found 2 active warnings
+2025-04-08 21:30:57,683 - __main__ - INFO - Processing warning: Freeze Warning (urn:oid:2.49.0.1.840.0.29f20d1eef446b100178e49475fef6b7e5d20e7d.002.1)
+2025-04-08 21:30:57,683 - __main__ - WARNING - No polygon data for warning: urn:oid:2.49.0.1.840.0.29f20d1eef446b100178e49475fef6b7e5d20e7d.002.1
+2025-04-08 21:30:57,683 - __main__ - INFO - Processing warning: Flood Warning (urn:oid:2.49.0.1.840.0.50f3baaf788d515fd7f150bb9d3d71fbbf67ab43.001.1)
+2025-04-08 21:31:06,600 - map_service - INFO - Successfully created image: output/warning_urn:oid:2.49.0.1.840.0.50f3baaf788d515fd7f150bb9d3d71fbbf67ab43.001.1.png
+2025-04-08 21:31:06,600 - __main__ - INFO - Generated map for warning: urn:oid:2.49.0.1.840.0.50f3baaf788d515fd7f150bb9d3d71fbbf67ab43.001.1
+2025-04-08 21:31:06,601 - __main__ - INFO - Generated 1 warning maps: output/warning_urn:oid:2.49.0.1.840.0.50f3baaf788d515fd7f150bb9d3d71fbbf67ab43.001.1.png
+2025-04-08 21:33:34,900 - __main__ - INFO - Fetching warnings for location: 37.3281, -87.4989
+2025-04-08 21:33:35,099 - warning_service - INFO - Fetching alerts from: https://api.weather.gov/alerts/active?zone=KYC107
+2025-04-08 21:33:35,572 - __main__ - INFO - Found 2 active warnings
+2025-04-08 21:33:35,572 - __main__ - INFO - Processing warning: Freeze Warning (urn:oid:2.49.0.1.840.0.29f20d1eef446b100178e49475fef6b7e5d20e7d.002.1)
+2025-04-08 21:33:35,573 - __main__ - WARNING - No polygon data for warning: urn:oid:2.49.0.1.840.0.29f20d1eef446b100178e49475fef6b7e5d20e7d.002.1
+2025-04-08 21:33:35,573 - __main__ - INFO - Processing warning: Flood Warning (urn:oid:2.49.0.1.840.0.50f3baaf788d515fd7f150bb9d3d71fbbf67ab43.001.1)
+2025-04-08 21:33:40,818 - map_service - INFO - Successfully created image: output/warning_urn:oid:2.49.0.1.840.0.50f3baaf788d515fd7f150bb9d3d71fbbf67ab43.001.1.png
+2025-04-08 21:33:40,819 - __main__ - INFO - Generated map for warning: urn:oid:2.49.0.1.840.0.50f3baaf788d515fd7f150bb9d3d71fbbf67ab43.001.1
+2025-04-08 21:33:40,819 - __main__ - INFO - Generated 1 warning maps: output/warning_urn:oid:2.49.0.1.840.0.50f3baaf788d515fd7f150bb9d3d71fbbf67ab43.001.1.png
+2025-04-08 21:36:53,245 - __main__ - INFO - Fetching warnings for location: 37.3281, -87.4989
+2025-04-08 21:36:53,445 - warning_service - INFO - Fetching alerts from: https://api.weather.gov/alerts/active?zone=KYC107
+2025-04-08 21:36:54,114 - __main__ - INFO - Found 2 active warnings
+2025-04-08 21:36:54,114 - __main__ - INFO - Processing warning: Freeze Warning (urn:oid:2.49.0.1.840.0.29f20d1eef446b100178e49475fef6b7e5d20e7d.002.1)
+2025-04-08 21:36:54,114 - __main__ - WARNING - No polygon data for warning: urn:oid:2.49.0.1.840.0.29f20d1eef446b100178e49475fef6b7e5d20e7d.002.1
+2025-04-08 21:36:54,114 - __main__ - INFO - Processing warning: Flood Warning (urn:oid:2.49.0.1.840.0.50f3baaf788d515fd7f150bb9d3d71fbbf67ab43.001.1)
+2025-04-08 21:36:59,072 - map_service - INFO - Successfully created image: output/warning_urn:oid:2.49.0.1.840.0.50f3baaf788d515fd7f150bb9d3d71fbbf67ab43.001.1.png
+2025-04-08 21:36:59,072 - __main__ - INFO - Generated map for warning: urn:oid:2.49.0.1.840.0.50f3baaf788d515fd7f150bb9d3d71fbbf67ab43.001.1
+2025-04-08 21:36:59,072 - __main__ - INFO - Generated 1 warning maps: output/warning_urn:oid:2.49.0.1.840.0.50f3baaf788d515fd7f150bb9d3d71fbbf67ab43.001.1.png
+2025-04-08 21:48:04,805 - __main__ - INFO - Fetching warnings for location: 37.3281, -87.4989
+2025-04-08 21:48:05,132 - warning_service - INFO - Fetching alerts from: https://api.weather.gov/alerts/active?zone=KYC107
+2025-04-08 21:48:05,750 - __main__ - INFO - Found 2 active warnings
+2025-04-08 21:48:05,750 - __main__ - INFO - Processing warning: Freeze Warning (urn:oid:2.49.0.1.840.0.29f20d1eef446b100178e49475fef6b7e5d20e7d.002.1)
+2025-04-08 21:48:05,751 - __main__ - WARNING - No polygon data for warning: urn:oid:2.49.0.1.840.0.29f20d1eef446b100178e49475fef6b7e5d20e7d.002.1
+2025-04-08 21:48:05,751 - __main__ - INFO - Processing warning: Flood Warning (urn:oid:2.49.0.1.840.0.50f3baaf788d515fd7f150bb9d3d71fbbf67ab43.001.1)
+2025-04-08 21:48:11,321 - map_service - INFO - Successfully created image: output/warning_urn:oid:2.49.0.1.840.0.50f3baaf788d515fd7f150bb9d3d71fbbf67ab43.001.1.png
+2025-04-08 21:48:11,321 - __main__ - INFO - Generated map for warning: urn:oid:2.49.0.1.840.0.50f3baaf788d515fd7f150bb9d3d71fbbf67ab43.001.1
+2025-04-08 21:48:11,321 - __main__ - INFO - Generated 1 warning maps: output/warning_urn:oid:2.49.0.1.840.0.50f3baaf788d515fd7f150bb9d3d71fbbf67ab43.001.1.png
+2025-04-08 22:01:44,932 - __main__ - INFO - Fetching warnings for location: 37.3281, -87.4989
+2025-04-08 22:01:45,115 - warning_service - INFO - Fetching alerts from: https://api.weather.gov/alerts/active?zone=KYC107
+2025-04-08 22:01:45,648 - __main__ - INFO - Found 2 active warnings
+2025-04-08 22:01:45,648 - __main__ - INFO - Processing warning: Freeze Warning (urn:oid:2.49.0.1.840.0.29f20d1eef446b100178e49475fef6b7e5d20e7d.002.1)
+2025-04-08 22:01:45,649 - __main__ - WARNING - No polygon data for warning: urn:oid:2.49.0.1.840.0.29f20d1eef446b100178e49475fef6b7e5d20e7d.002.1
+2025-04-08 22:01:45,649 - __main__ - INFO - Processing warning: Flood Warning (urn:oid:2.49.0.1.840.0.50f3baaf788d515fd7f150bb9d3d71fbbf67ab43.001.1)
+2025-04-08 22:01:51,077 - map_service - INFO - Successfully created image: output/warning_urn:oid:2.49.0.1.840.0.50f3baaf788d515fd7f150bb9d3d71fbbf67ab43.001.1.png
+2025-04-08 22:01:51,077 - __main__ - INFO - Generated map for warning: urn:oid:2.49.0.1.840.0.50f3baaf788d515fd7f150bb9d3d71fbbf67ab43.001.1
+2025-04-08 22:01:51,077 - __main__ - INFO - Generated 1 warning maps: output/warning_urn:oid:2.49.0.1.840.0.50f3baaf788d515fd7f150bb9d3d71fbbf67ab43.001.1.png
+2025-04-08 22:05:51,797 - __main__ - INFO - Fetching warnings for location: 37.3281, -87.4989
+2025-04-08 22:05:51,994 - warning_service - INFO - Fetching alerts from: https://api.weather.gov/alerts/active?zone=KYC107
+2025-04-08 22:05:52,485 - __main__ - INFO - Found 2 active warnings
+2025-04-08 22:05:52,485 - __main__ - INFO - Processing warning: Freeze Warning (urn:oid:2.49.0.1.840.0.29f20d1eef446b100178e49475fef6b7e5d20e7d.002.1)
+2025-04-08 22:05:52,485 - __main__ - WARNING - No polygon data for warning: urn:oid:2.49.0.1.840.0.29f20d1eef446b100178e49475fef6b7e5d20e7d.002.1
+2025-04-08 22:05:52,485 - __main__ - INFO - Processing warning: Flood Warning (urn:oid:2.49.0.1.840.0.50f3baaf788d515fd7f150bb9d3d71fbbf67ab43.001.1)
+2025-04-08 22:05:58,247 - map_service - INFO - Successfully created image: output/warning_urn:oid:2.49.0.1.840.0.50f3baaf788d515fd7f150bb9d3d71fbbf67ab43.001.1.png
+2025-04-08 22:05:58,248 - __main__ - INFO - Generated map for warning: urn:oid:2.49.0.1.840.0.50f3baaf788d515fd7f150bb9d3d71fbbf67ab43.001.1
+2025-04-08 22:05:58,248 - __main__ - INFO - Generated 1 warning maps: output/warning_urn:oid:2.49.0.1.840.0.50f3baaf788d515fd7f150bb9d3d71fbbf67ab43.001.1.png
+2025-04-08 22:08:36,973 - __main__ - INFO - Fetching warnings for location: 37.3281, -87.4989
+2025-04-08 22:08:37,263 - warning_service - INFO - Fetching alerts from: https://api.weather.gov/alerts/active?zone=KYC107
+2025-04-08 22:08:37,803 - __main__ - INFO - Found 2 active warnings
+2025-04-08 22:08:37,803 - __main__ - INFO - Processing warning: Freeze Warning (urn:oid:2.49.0.1.840.0.29f20d1eef446b100178e49475fef6b7e5d20e7d.002.1)
+2025-04-08 22:08:37,803 - __main__ - WARNING - No polygon data for warning: urn:oid:2.49.0.1.840.0.29f20d1eef446b100178e49475fef6b7e5d20e7d.002.1
+2025-04-08 22:08:37,803 - __main__ - INFO - Processing warning: Flood Warning (urn:oid:2.49.0.1.840.0.50f3baaf788d515fd7f150bb9d3d71fbbf67ab43.001.1)
+2025-04-08 22:08:43,296 - map_service - INFO - Successfully created image: output/warning_urn:oid:2.49.0.1.840.0.50f3baaf788d515fd7f150bb9d3d71fbbf67ab43.001.1.png
+2025-04-08 22:08:43,296 - __main__ - INFO - Generated map for warning: urn:oid:2.49.0.1.840.0.50f3baaf788d515fd7f150bb9d3d71fbbf67ab43.001.1
+2025-04-08 22:08:43,296 - __main__ - INFO - Generated 1 warning maps: output/warning_urn:oid:2.49.0.1.840.0.50f3baaf788d515fd7f150bb9d3d71fbbf67ab43.001.1.png
+2025-04-08 22:14:35,903 - __main__ - INFO - Fetching warnings for location: 37.3281, -87.4989
+2025-04-08 22:14:36,073 - warning_service - INFO - Fetching alerts from: https://api.weather.gov/alerts/active?zone=KYC107
+2025-04-08 22:14:36,505 - __main__ - INFO - Found 2 active warnings
+2025-04-08 22:14:36,505 - __main__ - INFO - Processing warning: Freeze Warning (urn:oid:2.49.0.1.840.0.29f20d1eef446b100178e49475fef6b7e5d20e7d.002.1)
+2025-04-08 22:14:36,505 - __main__ - WARNING - No polygon data for warning: urn:oid:2.49.0.1.840.0.29f20d1eef446b100178e49475fef6b7e5d20e7d.002.1
+2025-04-08 22:14:36,505 - __main__ - INFO - Processing warning: Flood Warning (urn:oid:2.49.0.1.840.0.50f3baaf788d515fd7f150bb9d3d71fbbf67ab43.001.1)
+2025-04-08 22:14:42,113 - map_service - INFO - Successfully created image: output/warning_urn:oid:2.49.0.1.840.0.50f3baaf788d515fd7f150bb9d3d71fbbf67ab43.001.1.png
+2025-04-08 22:14:42,113 - __main__ - INFO - Generated map for warning: urn:oid:2.49.0.1.840.0.50f3baaf788d515fd7f150bb9d3d71fbbf67ab43.001.1
+2025-04-08 22:14:42,113 - __main__ - INFO - Generated 1 warning maps: output/warning_urn:oid:2.49.0.1.840.0.50f3baaf788d515fd7f150bb9d3d71fbbf67ab43.001.1.png
+2025-04-08 22:16:23,262 - __main__ - INFO - Fetching warnings for location: 47.658, -117.4235
+2025-04-08 22:16:23,885 - warning_service - INFO - Fetching alerts from: https://api.weather.gov/alerts/active?zone=WAC063
+2025-04-08 22:16:24,944 - __main__ - INFO - Found 1 active warnings
+2025-04-08 22:16:24,944 - __main__ - INFO - Processing warning: Special Weather Statement (urn:oid:2.49.0.1.840.0.bbd1673561c907a43115c4c94872426e79a869e3.001.1)
+2025-04-08 22:16:31,510 - map_service - INFO - Successfully created image: output/warning_urn:oid:2.49.0.1.840.0.bbd1673561c907a43115c4c94872426e79a869e3.001.1.png
+2025-04-08 22:16:31,511 - __main__ - INFO - Generated map for warning: urn:oid:2.49.0.1.840.0.bbd1673561c907a43115c4c94872426e79a869e3.001.1
+2025-04-08 22:16:31,511 - __main__ - INFO - Generated 1 warning maps: output/warning_urn:oid:2.49.0.1.840.0.bbd1673561c907a43115c4c94872426e79a869e3.001.1.png

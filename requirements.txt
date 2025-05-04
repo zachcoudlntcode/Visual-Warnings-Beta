@@ -1,0 +1,11 @@
+requests==2.31.0
+folium==0.14.0
+schedule==1.2.0
+selenium==4.16.0
+webdriver-manager==4.0.1
+geopandas==0.14.1
+contextily==1.4.0
+# Optional tools for improved image generation (if available on system)
+# - wkhtmltopdf (external system tool)
+# - cutycapt (external system tool)
+# - webkit2png (for macOS)

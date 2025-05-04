@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.zacharymiller.visualwarnings</string>
+    <key>ProgramArguments</key>
+    <array>
+        <string>/Users/zacharymiller/Library/CloudStorage/GoogleDrive-zachmiller3292@gmail.com/My Drive/Warning Image Generator Working 4-12/Visual Warnings Beta/venv/bin/python3</string>
+        <string>/Users/zacharymiller/Library/CloudStorage/GoogleDrive-zachmiller3292@gmail.com/My Drive/Warning Image Generator Working 4-12/Visual Warnings Beta/automation.py</string>
+        <string>--interval</string>
+        <string>1</string>
+        <string>--webhook</string>
+        <string>https://hook.us2.make.com/uvpcvxkgx5wcs4tn3sj2na2ugjpnf8x0</string>
+    </array>
+    <key>RunAtLoad</key>
+    <true/>
+    <key>KeepAlive</key>
+    <true/>
+    <key>StandardErrorPath</key>
+    <string>/Users/zacharymiller/Library/Logs/VisualWarnings/error.log</string>
+    <key>StandardOutPath</key>
+    <string>/Users/zacharymiller/Library/Logs/VisualWarnings/output.log</string>
+    <key>WorkingDirectory</key>
+    <string>/Users/zacharymiller/Library/CloudStorage/GoogleDrive-zachmiller3292@gmail.com/My Drive/Warning Image Generator Working 4-12/Visual Warnings Beta</string>
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>PATH</key>
+        <string>/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/homebrew/bin</string>
+        <key>PYTHONPATH</key>
+        <string>/Users/zacharymiller/Library/CloudStorage/GoogleDrive-zachmiller3292@gmail.com/My Drive/Warning Image Generator Working 4-12/Visual Warnings Beta</string>
+    </dict>
+    <key>ProcessType</key>
+    <string>Background</string>
+    <key>Nice</key>
+    <integer>0</integer>
+</dict>
+</plist>
