@@ -22,7 +22,7 @@ A 24/7 service that monitors NWS weather warnings, generates visual maps, and se
 
 2. Chrome or Chromium must be installed for Selenium (used for image generation)
 
-### Setting up the Service
+### Setting up the Service (macOS)
 
 1. Make the setup script executable:
    ```
@@ -38,14 +38,38 @@ A 24/7 service that monitors NWS weather warnings, generates visual maps, and se
 
 The service will now be installed as a Launch Agent and will start automatically.
 
+### Setting up the Service (Debian/Linux)
+
+1. Make the Debian setup script executable:
+   ```
+   chmod +x setup_debian.sh
+   ```
+
+2. Run the setup script with sudo:
+   ```
+   sudo ./setup_debian.sh
+   ```
+
+3. When prompted, enter your webhook URL (Discord, Slack, or other webhook service)
+
+4. The service will be installed as a systemd service and start automatically
+
 ### Manual Configuration
 
-If you need to manually configure the service:
+#### For macOS:
 
 1. Edit the `com.zacharymiller.visualwarnings.plist` file
 2. Update the webhook URL and any other parameters
 3. Copy the file to `~/Library/LaunchAgents/`
 4. Load the service with: `launchctl load ~/Library/LaunchAgents/com.zacharymiller.visualwarnings.plist`
+
+#### For Debian/Linux:
+
+1. Edit the `visual-warnings.service` file
+2. Update the webhook URL and any other parameters
+3. Copy the file to `/etc/systemd/system/`
+4. Reload systemd with: `sudo systemctl daemon-reload`
+5. Enable and start the service: `sudo systemctl enable --now visual-warnings.service`
 
 ## Command Line Options
 
@@ -65,10 +89,24 @@ Options:
 
 ## Monitoring the Service
 
+### macOS:
 - View logs: Check `~/Library/Logs/VisualWarnings/` for output and error logs
 - Check status: `launchctl list | grep visualwarnings`
 - Stop service: `launchctl unload ~/Library/LaunchAgents/com.zacharymiller.visualwarnings.plist`
 - Start service: `launchctl load ~/Library/LaunchAgents/com.zacharymiller.visualwarnings.plist`
+
+### Debian/Linux:
+- View logs: Check `/var/log/visual-warnings/` for log files
+- Check status: `systemctl status visual-warnings`
+- Stop service: `systemctl stop visual-warnings`
+- Start service: `systemctl start visual-warnings`
+- Restart service: `systemctl restart visual-warnings`
+- View service logs: `journalctl -u visual-warnings`
+
+You can also use the included dashboard script for Linux:
+```
+sudo ./dashboard.sh
+```
 
 ## Customizing Warning Areas
 
@@ -84,7 +122,7 @@ The service can send warning images and detailed warning text to:
 
 ## Troubleshooting
 
-If the service isn't working properly:
+### macOS Issues:
 1. Check the log files in `~/Library/Logs/VisualWarnings/`
 2. Ensure all requirements are installed correctly
 3. Make sure Chrome/Chromium is installed for Selenium
@@ -95,6 +133,18 @@ If needed, restart the service with:
 ```
 launchctl unload ~/Library/LaunchAgents/com.zacharymiller.visualwarnings.plist
 launchctl load ~/Library/LaunchAgents/com.zacharymiller.visualwarnings.plist
+```
+
+### Debian/Linux Issues:
+1. Check the log files in `/var/log/visual-warnings/`
+2. Check systemd service logs: `journalctl -u visual-warnings -n 50`
+3. Ensure Chromium is installed: `sudo apt install chromium-browser chromium-driver`
+4. Verify ownership and permissions: `sudo chown -R youruser:youruser /opt/visual-warnings`
+5. Check for Python errors: `/opt/visual-warnings/venv/bin/python3 /opt/visual-warnings/automation.py --run-once`
+
+If needed, restart the service with:
+```
+sudo systemctl restart visual-warnings
 ```
 
 ## License

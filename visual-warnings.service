@@ -1,0 +1,16 @@
+[Unit]
+Description=Visual Warnings Service
+After=network.target
+
+[Service]
+Type=simple
+User=YOUR_USERNAME
+WorkingDirectory=/opt/visual-warnings
+ExecStart=/opt/visual-warnings/venv/bin/python3 /opt/visual-warnings/automation.py --interval 1 --webhook YOUR_WEBHOOK_URL_HERE
+Restart=on-failure
+RestartSec=10
+StandardOutput=append:/var/log/visual-warnings/output.log
+StandardError=append:/var/log/visual-warnings/error.log
+
+[Install]
+WantedBy=multi-user.target

@@ -1,75 +1,174 @@
 #!/bin/bash
 
-# Visual Warnings Status Dashboard
-# This script shows the real-time status of the Visual Warnings service
+# Visual Warnings Service Dashboard for Linux
+# This script provides a simple dashboard to manage the Visual Warnings service
 
-YELLOW='\033[1;33m'
-GREEN='\033[0;32m'
+# ANSI color codes
 RED='\033[0;31m'
+GREEN='\033[0;32m'
 BLUE='\033[0;34m'
+YELLOW='\033[1;33m'
 NC='\033[0m' # No Color
 
-# Clear screen
-clear
+# Service name
+SERVICE_NAME="visual-warnings.service"
+LOG_DIR="/var/log/visual-warnings"
+INSTALL_DIR="/opt/visual-warnings"
 
-echo -e "${BLUE}=============================================${NC}"
-echo -e "${BLUE}    VISUAL WARNINGS SERVICE DASHBOARD    ${NC}"
-echo -e "${BLUE}=============================================${NC}"
-echo ""
-
-# Check if service is running
-if launchctl list | grep -q "com.zacharymiller.visualwarnings"; then
-    echo -e "${GREEN}✅ Service Status: RUNNING${NC}"
-    pid=$(launchctl list | grep "com.zacharymiller.visualwarnings" | awk '{print $1}')
-    echo -e "   Process ID: ${pid}"
-else
-    echo -e "${RED}❌ Service Status: NOT RUNNING${NC}"
-fi
-
-# Get info about last run
-if [ -f ~/Library/Logs/VisualWarnings/error.log ]; then
-    last_check=$(grep "Running scheduled warning check" ~/Library/Logs/VisualWarnings/error.log | tail -n 1)
-    last_time=$(echo $last_check | cut -d' ' -f1,2)
-    echo -e "${YELLOW}Last Check:${NC} $last_time"
-    
-    # Get count of warnings
-    last_alert_count=$(grep "API returned" ~/Library/Logs/VisualWarnings/error.log | tail -n 1 | grep -o '[0-9]\+ total alerts' | cut -d' ' -f1)
-    echo -e "${YELLOW}Active Alerts:${NC} $last_alert_count"
-    
-    # Get new alerts
-    last_new_alerts=$(grep "Found [0-9]\+ new alerts" ~/Library/Logs/VisualWarnings/error.log | tail -n 1 | grep -o '[0-9]\+ new alerts' | cut -d' ' -f1)
-    if [ "$last_new_alerts" != "0" ] && [ ! -z "$last_new_alerts" ]; then
-        echo -e "${GREEN}New Alerts:${NC} $last_new_alerts"
-    else
-        echo -e "${YELLOW}New Alerts:${NC} 0"
+# Function to check if the script is run with sudo
+check_sudo() {
+    if [ "$EUID" -ne 0 ]; then
+        echo -e "${RED}Please run with sudo privileges to manage the service${NC}"
+        echo "Usage: sudo ./dashboard.sh"
+        exit 1
     fi
-else
-    echo -e "${RED}❌ No log file found${NC}"
-fi
+}
 
-echo ""
-echo -e "${BLUE}--------- RECENT ACTIVITY ---------${NC}"
-echo ""
+# Function to display service status
+show_status() {
+    echo -e "${BLUE}=== Visual Warnings Service Status ===${NC}"
+    
+    # Check if service exists
+    if systemctl list-unit-files | grep -q "$SERVICE_NAME"; then
+        # Check if service is running
+        if systemctl is-active --quiet "$SERVICE_NAME"; then
+            echo -e "${GREEN}● Service is running${NC}"
+        else
+            echo -e "${RED}○ Service is stopped${NC}"
+        fi
+        
+        # Check if service is enabled at boot
+        if systemctl is-enabled --quiet "$SERVICE_NAME"; then
+            echo -e "${GREEN}● Service is enabled at boot${NC}"
+        else
+            echo -e "${YELLOW}○ Service is not enabled at boot${NC}"
+        fi
+        
+        # Show service details
+        echo
+        echo -e "${BLUE}Service details:${NC}"
+        systemctl status "$SERVICE_NAME" -n 5
+    else
+        echo -e "${RED}Service is not installed${NC}"
+    fi
+}
 
-# Show the last 10 significant log entries
-if [ -f ~/Library/Logs/VisualWarnings/error.log ]; then
-    grep -E "(Starting warning check|Found.*new alerts|Generated.*warning maps|Processing.*alert|Error)" ~/Library/Logs/VisualWarnings/error.log | tail -n 10
-fi
+# Function to show logs
+show_logs() {
+    echo -e "${BLUE}=== Recent Logs ===${NC}"
+    if [ -d "$LOG_DIR" ]; then
+        LATEST_LOG=$(find "$LOG_DIR" -name "visual_warnings_automation_*.log" -type f -printf "%T@ %p\n" | sort -n | tail -1 | cut -d' ' -f2-)
+        if [ -n "$LATEST_LOG" ]; then
+            echo -e "${GREEN}Showing last 20 lines from ${LATEST_LOG}${NC}"
+            echo
+            tail -n 20 "$LATEST_LOG"
+        else
+            echo -e "${YELLOW}No log files found in $LOG_DIR${NC}"
+        fi
+    else
+        echo -e "${RED}Log directory $LOG_DIR does not exist${NC}"
+    fi
+}
 
-echo ""
-echo -e "${BLUE}--------- OUTPUT DIRECTORY ---------${NC}"
-echo ""
+# Function to start the service
+start_service() {
+    echo -e "${BLUE}Starting service...${NC}"
+    systemctl start "$SERVICE_NAME"
+    sleep 2
+    if systemctl is-active --quiet "$SERVICE_NAME"; then
+        echo -e "${GREEN}Service started successfully${NC}"
+    else
+        echo -e "${RED}Failed to start service. Check logs for details.${NC}"
+    fi
+}
 
-# List recent output files
-ls -lt "$(dirname "$0")/output" | head -n 10
+# Function to stop the service
+stop_service() {
+    echo -e "${BLUE}Stopping service...${NC}"
+    systemctl stop "$SERVICE_NAME"
+    sleep 2
+    if ! systemctl is-active --quiet "$SERVICE_NAME"; then
+        echo -e "${GREEN}Service stopped successfully${NC}"
+    else
+        echo -e "${RED}Failed to stop service${NC}"
+    fi
+}
 
-echo ""
-echo -e "${YELLOW}Press Ctrl+C to exit${NC}"
-echo ""
+# Function to restart the service
+restart_service() {
+    echo -e "${BLUE}Restarting service...${NC}"
+    systemctl restart "$SERVICE_NAME"
+    sleep 2
+    if systemctl is-active --quiet "$SERVICE_NAME"; then
+        echo -e "${GREEN}Service restarted successfully${NC}"
+    else
+        echo -e "${RED}Failed to restart service. Check logs for details.${NC}"
+    fi
+}
 
-# Keep running and showing real-time updates
-while true; do
-    sleep 10
+# Function to enable/disable service at boot
+toggle_boot() {
+    if systemctl is-enabled --quiet "$SERVICE_NAME"; then
+        echo -e "${BLUE}Disabling service at boot...${NC}"
+        systemctl disable "$SERVICE_NAME"
+        echo -e "${YELLOW}Service will not start at boot${NC}"
+    else
+        echo -e "${BLUE}Enabling service at boot...${NC}"
+        systemctl enable "$SERVICE_NAME"
+        echo -e "${GREEN}Service will start automatically at boot${NC}"
+    fi
+}
+
+# Function to run service once manually
+run_once() {
+    echo -e "${BLUE}Running service once...${NC}"
+    if [ -d "$INSTALL_DIR" ]; then
+        echo -e "${GREEN}Executing: $INSTALL_DIR/venv/bin/python3 $INSTALL_DIR/automation.py --run-once${NC}"
+        "$INSTALL_DIR/venv/bin/python3" "$INSTALL_DIR/automation.py" --run-once
+        echo -e "${GREEN}Manual run completed${NC}"
+    else
+        echo -e "${RED}Installation directory $INSTALL_DIR not found${NC}"
+    fi
+}
+
+# Main menu function
+show_menu() {
     clear
-    $0
+    echo -e "${BLUE}============================================${NC}"
+    echo -e "${BLUE}     Visual Warnings Service Dashboard${NC}"
+    echo -e "${BLUE}============================================${NC}"
+    echo
+    show_status
+    echo
+    echo -e "${BLUE}Options:${NC}"
+    echo "1. Start service"
+    echo "2. Stop service"
+    echo "3. Restart service"
+    echo "4. Enable/Disable at boot"
+    echo "5. Show logs"
+    echo "6. Run service once manually"
+    echo "7. Exit"
+    echo
+    read -p "Select an option (1-7): " choice
+    
+    case $choice in
+        1) start_service ;;
+        2) stop_service ;;
+        3) restart_service ;;
+        4) toggle_boot ;;
+        5) show_logs ;;
+        6) run_once ;;
+        7) exit 0 ;;
+        *) echo -e "${RED}Invalid option${NC}" ;;
+    esac
+    
+    echo
+    read -p "Press Enter to return to menu..."
+}
+
+# Main execution
+check_sudo
+
+while true; do
+    show_menu
 done
