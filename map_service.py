@@ -16,6 +16,9 @@ from webdriver_manager.chrome import ChromeDriverManager
 from selenium.common.exceptions import WebDriverException
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+import re  # Added for hazard extraction
+from datetime import datetime  # Added for time conversion
+import pytz  # Added for time conversion
 
 
 class MapService:
@@ -223,12 +226,13 @@ class MapService:
                 m.fit_bounds(bounds)
 
             # Get nearby counties to display on the map
-            nearby_counties = self.get_nearby_counties(warning['polygon'])
+            nearby_counties_gdf = self.get_nearby_counties(
+                warning['polygon'])  # Renamed to avoid conflict
 
             # Add county boundaries to the map if available
-            if not nearby_counties.empty:
+            if not nearby_counties_gdf.empty:
                 folium.GeoJson(
-                    nearby_counties,
+                    nearby_counties_gdf,  # Use renamed variable
                     name='County Boundaries',
                     style_function=lambda x: {
                         'fillColor': 'transparent',
@@ -245,7 +249,8 @@ class MapService:
                 ).add_to(m)
 
             # Add polygon to map with color based on warning event type
-            event_type = warning.get('event', '')
+            event_type = warning.get(
+                'event', 'Unknown Warning')  # Default text
             color = self._get_warning_color(event_type)
 
             folium.Polygon(
@@ -261,29 +266,74 @@ class MapService:
             # Add a layer control to allow toggling between map providers
             folium.LayerControl().add_to(m)
 
-            # Add warning information directly to the map as an overlay
+            # Extract information for the overlay
             affected_areas = self._extract_affected_areas(warning)
+            hazards = self._extract_hazards_from_description(
+                warning.get('description', ''))
 
-            # Get NWSheadline for the title, fallback to event type if not available
-            nws_headline = warning.get('NWSheadline', '')
-            title_text = nws_headline if nws_headline else event_type.upper()
+            # Convert and format expiration time
+            expires_str = warning.get('expires', 'Not available')
+            formatted_expires_time = 'Not available'
+            if expires_str and expires_str != 'Not available':
+                try:
+                    # Parse the ISO format string
+                    # Example: 2024-07-21T19:00:00-05:00 or 2024-07-21T19:00:00Z
+                    if expires_str.endswith('Z'):
+                        dt_utc = datetime.strptime(
+                            expires_str, "%Y-%m-%dT%H:%M:%SZ").replace(tzinfo=pytz.utc)
+                    else:
+                        # Handle timezone offset like -05:00
+                        if ':' in expires_str[-6:]:
+                            dt_aware = datetime.fromisoformat(expires_str)
+                        else:  # if no colon in offset, add it for fromisoformat
+                            dt_aware = datetime.fromisoformat(
+                                expires_str[:-2] + ':' + expires_str[-2:])
+                        dt_utc = dt_aware.astimezone(pytz.utc)
 
-            # Create HTML for the title banner - updated with solid background, modern font, and rounded bottom corners
+                    # Convert to CDT
+                    cdt_tz = pytz.timezone('America/Chicago')
+                    dt_cdt = dt_utc.astimezone(cdt_tz)
+                    formatted_expires_time = dt_cdt.strftime(
+                        "%b %d, %Y, %I:%M %p %Z")
+                except ValueError as e:
+                    self.logger.warning(
+                        f"Could not parse expires time '{expires_str}': {e}")
+                    # Fallback to original string if parsing fails
+                    formatted_expires_time = expires_str
+
+            # Format the main title
+            main_title_text = f"A {event_type} has been issued"
+
+            # Create HTML for the title banner - updated with new layout
             title_html = f'''
                 <div style="position: fixed; 
                             top: 0; 
                             left: 0; 
                             width: 100%; 
-                            height: 130px; 
-                            background-color: #a6a6a6; 
-                            color: black; 
-                            padding: 10px; 
-                            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
-                            border-bottom-left-radius: 15px;
-                            border-bottom-right-radius: 15px;
-                            z-index: 9999;">
-                    <h2 style="margin: 0; font-size: 24px; font-weight: 600;">{title_text}</h2>
-                    <p style="margin: 5px 0; font-size: 18px; font-weight: 400;">AFFECTED AREAS: {affected_areas}</p>
+                            background-color: rgb(0, 0, 0); /* Changed to solid black */
+                            color: white; 
+                            padding: 10px 15px; 
+                            font-family: 'Roboto', 'Segoe UI', Helvetica, Arial, sans-serif; 
+                            z-index: 9999;
+                            box-sizing: border-box;
+                            border-bottom: 3px solid {color};
+                            text-align: center; /* Center the main title */
+                            ">
+                    <h2 style="margin: 0 0 10px 0; font-size: 24px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">{main_title_text}</h2>
+                    <div style="display: flex; justify-content: space-around; align-items: flex-start; width: 100%; margin-top: 10px;">
+                        <div style="background-color: rgba(20, 20, 20, 0.8); padding: 8px 12px; border-radius: 5px; margin: 0 5px; flex: 1; min-width: 0;"> <!-- Added flex: 1 and min-width: 0 -->
+                            <h3 style="margin: 0 0 5px 0; font-size: 14px; font-weight: 600; text-transform: uppercase; border-bottom: 1px solid {color}; padding-bottom: 3px;">EXPIRES</h3>
+                            <p style="margin: 0; font-size: 13px; line-height: 1.4;">{formatted_expires_time}</p>
+                        </div>
+                        <div style="background-color: rgba(20, 20, 20, 0.8); padding: 8px 12px; border-radius: 5px; margin: 0 5px; flex: 1; min-width: 0;"> <!-- Added flex: 1 and min-width: 0 -->
+                            <h3 style="margin: 0 0 5px 0; font-size: 14px; font-weight: 600; text-transform: uppercase; border-bottom: 1px solid {color}; padding-bottom: 3px;">AFFECTED COUNTIES</h3>
+                            <p style="margin: 0; font-size: 13px; line-height: 1.4; word-wrap: break-word; overflow-wrap: break-word;">{affected_areas}</p> <!-- Added word-wrap -->
+                        </div>
+                        <div style="background-color: rgba(20, 20, 20, 0.8); padding: 8px 12px; border-radius: 5px; margin: 0 5px; flex: 1; min-width: 0;"> <!-- Added flex: 1 and min-width: 0 -->
+                            <h3 style="margin: 0 0 5px 0; font-size: 14px; font-weight: 600; text-transform: uppercase; border-bottom: 1px solid {color}; padding-bottom: 3px;">HAZARDS</h3>
+                            <p style="margin: 0; font-size: 13px; line-height: 1.4; word-wrap: break-word; overflow-wrap: break-word;">{hazards}</p> <!-- Added word-wrap -->
+                        </div>
+                    </div>
                 </div>
             '''
 
@@ -597,6 +647,41 @@ class MapService:
 
         # If we can't find specific county information, return a generic message
         return "See warning details for specific locations"
+
+    def _extract_hazards_from_description(self, description: str) -> str:
+        """
+        Extracts hazard information from the warning description.
+        NWS descriptions often have a "HAZARD..." section.
+        """
+        if not description:
+            return "Not specified"
+
+        # Try to find "HAZARD..." section
+        hazard_match = re.search(
+            r"HAZARD\\.\\.\\.([^\\n\\n]+)", description, re.IGNORECASE)
+        if hazard_match:
+            hazards = hazard_match.group(1).strip()
+            # Clean up common extra phrases
+            hazards = hazards.replace("...", "").strip()
+            # Limit length if necessary
+            return hazards[:250] + "..." if len(hazards) > 250 else hazards
+
+        # Fallback: look for common keywords if specific section not found
+        # This can be expanded
+        potential_hazards = []
+        if "hail" in description.lower():
+            potential_hazards.append("Hail")
+        if "wind gusts" in description.lower():
+            potential_hazards.append("Wind Gusts")
+        if "tornado" in description.lower():
+            potential_hazards.append("Tornado")
+        if "flooding" in description.lower():
+            potential_hazards.append("Flooding")
+
+        if potential_hazards:
+            return ", ".join(potential_hazards)
+
+        return "See description for details"
 
     def _get_image_base64(self, image_path: str) -> str:
         """
