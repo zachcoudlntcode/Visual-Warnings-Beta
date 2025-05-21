@@ -258,7 +258,7 @@ class MapService:
                 color=color,
                 fill=True,
                 fill_color=color,
-                fill_opacity=0.4,
+                fill_opacity=0,
                 popup=folium.Popup(
                     f"<b>{event_type}</b><br>{warning.get('headline', '')}", max_width=300)
             ).add_to(m)
@@ -604,7 +604,7 @@ class MapService:
             return "#FFFF00"  # Yellow for advisories
 
         # Final default
-        return "#808080"  # Gray for unknown
+        return "#2600FF"  # Blue for unknown
 
     def _extract_affected_areas(self, warning: Dict[str, Any]) -> str:
         """
